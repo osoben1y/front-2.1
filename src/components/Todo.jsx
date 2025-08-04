@@ -1,6 +1,6 @@
 import { Component } from "react";
 
-export default class TodoList extends Component {
+export default class Todo extends Component {
     constructor() {
         super();
         this.state = {
@@ -10,6 +10,7 @@ export default class TodoList extends Component {
             updatingItem: null,
             isModalOpen: false,
             searchTerm: "",
+            modalState: false,
         };
     }
 
@@ -80,23 +81,43 @@ export default class TodoList extends Component {
                         className="w-2/3 border border-gray-300 px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-400"
                     />
                     <button
-                        onClick={() =>
+                        onClick={() => {
                             this.setState({
                                 isModalOpen: true,
                                 title: "",
                                 description: "",
                                 updatingItem: null,
-                            })
-                        }
-                        className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700"
+                            }, () => {
+                                setTimeout(() => this.setState({ modalAnimation: true }), 10);
+                            });
+                        }}
+
+                        className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 z"
                     >
                         +
                     </button>
                 </div>
 
                 {isModalOpen && (
-                    <div className="fixed inset-0 bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
-                        <div className="bg-white rounded-xl p-6 w-[90%] max-w-md shadow-xl">
+                    <div
+                        className={`fixed inset-0 bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 transform transition-all duration-300 ${this.state.modalAnimation ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                            }`}
+                        onClick={() => {
+                            this.setState({ modalAnimation: false });
+                            setTimeout(() => {
+                                this.setState({
+                                    isModalOpen: false,
+                                    title: "",
+                                    description: "",
+                                    updatingItem: null,
+                                });
+                            }, 300);
+                        }}
+                    >
+                        <div
+                            className="bg-white rounded-xl p-6 w-[90%] max-w-md shadow-xl"
+                            onClick={(e) => e.stopPropagation()} // ❗ modal ichidagi klik tashqi klik emas
+                        >
                             <h2 className="text-xl font-medium mb-4">
                                 {this.state.updatingItem ? "update Task" : "new Task"}
                             </h2>
@@ -127,14 +148,17 @@ export default class TodoList extends Component {
                                     </button>
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            this.setState({
-                                                isModalOpen: false,
-                                                title: "",
-                                                description: "",
-                                                updatingItem: null,
-                                            })
-                                        }
+                                        onClick={() => {
+                                            this.setState({ modalAnimation: false });
+                                            setTimeout(() => {
+                                                this.setState({
+                                                    isModalOpen: false,
+                                                    title: "",
+                                                    description: "",
+                                                    updatingItem: null,
+                                                });
+                                            }, 300);
+                                        }}
                                         className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500"
                                     >
                                         cancel
@@ -144,6 +168,7 @@ export default class TodoList extends Component {
                         </div>
                     </div>
                 )}
+
 
                 <div className="overflow-x-auto mt-6 shadow-sm border border-gray-200 rounded-lg">
                     <table className="w-full table-auto text-sm text-left">
