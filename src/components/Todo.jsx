@@ -66,7 +66,6 @@ export default class Todo extends Component {
             item.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
     };
-
     render() {
         const { title, description, isModalOpen, searchTerm } = this.state;
         return (
@@ -97,7 +96,6 @@ export default class Todo extends Component {
                         +
                     </button>
                 </div>
-
                 {isModalOpen && (
                     <div
                         className={`fixed inset-0 bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 transform transition-all duration-300 ${this.state.modalAnimation ? "opacity-100 scale-100" : "opacity-0 scale-95"
@@ -116,7 +114,7 @@ export default class Todo extends Component {
                     >
                         <div
                             className="bg-white rounded-xl p-6 w-[90%] max-w-md shadow-xl"
-                            onClick={(e) => e.stopPropagation()} // ❗ modal ichidagi klik tashqi klik emas
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <h2 className="text-xl font-medium mb-4">
                                 {this.state.updatingItem ? "update Task" : "new Task"}
@@ -168,8 +166,6 @@ export default class Todo extends Component {
                         </div>
                     </div>
                 )}
-
-
                 <div className="overflow-x-auto mt-6 shadow-sm border border-gray-200 rounded-lg">
                     <table className="w-full table-auto text-sm text-left">
                         <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
